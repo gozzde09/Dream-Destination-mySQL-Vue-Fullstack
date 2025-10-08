@@ -1,0 +1,25 @@
+use reviews
+show collections
+db.reviews.insertMany([
+    {
+        reviewTitle: "Dream travel",
+        reviewDescription: "something",
+        reviewRating:5,
+        visitedCountry:" France"
+    },
+    {
+        reviewTitle: "Terrible",
+        reviewDescription: "anything",
+        reviewRating:1,
+        visitedCountry:" Belgium"
+    }
+])
+
+db.reviews.insertOne(
+        {
+        reviewTitle: "Helt okej",
+        reviewDescription: "something",
+        reviewRating:2,
+        visitedCountry:" Sweden"
+    })
+db.reviews.find()

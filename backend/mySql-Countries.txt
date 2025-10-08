@@ -1,0 +1,114 @@
+CREATE DATABASE dreamdestination;
+
+CREATE TABLE continent (
+    continentId INT NOT NULL,
+    continentName VARCHAR (50) UNIQUE,
+    PRIMARY KEY (continentId)
+);
+
+CREATE TABLE language (
+    languageId INT NOT NULL,
+    languageName VARCHAR(50) UNIQUE,
+    PRIMARY KEY (languageId)
+);
+CREATE TABLE currency (
+    currencyId INT NOT NULL,
+    currencyName VARCHAR(50) UNIQUE,
+    currencyAcronym VARCHAR(50),
+    PRIMARY KEY (currencyId)
+);
+
+CREATE TABLE country (
+    countryId INT NOT NULL,
+    countryName VARCHAR(50) UNIQUE,
+    countryDescription TEXT,
+    countryCapital VARCHAR(50) ,
+    countryPopulation INT,
+    countryContinentId INT,
+    countryLanguageId INT,
+    countryCurrencyId INT,
+    PRIMARY KEY (countryId),
+    FOREIGN KEY(countryContinentId) REFERENCES continent(continentId),
+    FOREIGN KEY(countryCurrencyId) REFERENCES currency(currencyId),
+    FOREIGN KEY(countryLanguageId) REFERENCES language(languageId)
+);
+
+CREATE TABLE city (
+cityId INT NOT NULL AUTO_INCREMENT,
+cityName VARCHAR(50) UNIQUE,
+cityDescription VARCHAR(250),
+cityPopulation INT,
+cityCountryId INT,
+PRIMARY KEY (cityId),
+FOREIGN KEY (cityCountryId) REFERENCES country(countryId)
+);
+
+-- Inserting data into the continent table
+INSERT INTO continent (continentName) VALUES
+('Asia'), -- continentId = 1
+('Americas'), -- continentId = 2
+('Oceania'), -- continentId = 3
+('Africa'), -- continentId = 4
+('Europe'); -- continentId = 5
+
+-- Inserting data into language table
+INSERT INTO language (languageName) VALUES
+('Hindi'), -- 1
+('Portuguese'),-- 2
+('English'),-- 3
+('Arabic'), -- 4
+('Chinese'); -- 5
+
+-- Inserting data into currency table
+INSERT INTO currency (currencyName, currencyAcronym) VALUES
+('Indian Rupee', 'INR'),
+('Brazilian Real', 'BRL'),
+('Australian Dollar', 'AUD'),
+('Sudanese Pound', 'SDG'),
+('Chinese Yuan', 'CNY'),
+('United States Dollar', 'USD');
+
+-- Inserting data into country table
+INSERT INTO country (countryName, countryDescription, countryCapital, countryPopulation, countryContinentId, countryLanguageId, countryCurrencyId) VALUES
+('India', 'India, officially the Republic of India, is a country in South Asia. It is the seventh-largest country by area; the most populous country as of June 2023; and from the time of its independence in 1947, the world''s most populous democracy. Bounded by the Indian Ocean on the south, the Arabian Sea on the southwest, and the Bay of Bengal on the southeast, it shares land borders with Pakistan to the west; China, Nepal, and Bhutan to the north; and Bangladesh and Myanmar to the east. In the Indian Ocean, India is in the vicinity of Sri Lanka and the Maldives; its Andaman and Nicobar Islands share a maritime border with Thailand, Myanmar, and Indonesia.', 'New Delhi', 1380004385, 1, 1, 1),
+('Brazil', 'Brazil, officially the Federative Republic of Brazil, is the largest and easternmost country in South America and in Latin America. Brazil is the world''s fifth-largest country by area and the seventh most populous. Its capital is Brasília, and its most populous city is São Paulo. The federation is composed of the union of the 26 states and the Federal District. It is the only country in the Americas to have Portuguese as an official language. Brazil is one of the most multicultural and ethnically diverse nations, due to over a century of mass immigration from around the world.', 'Brasília', 212559417, 2, 2, 2),
+('Australia', 'Australia, officially the Commonwealth of Australia, is a sovereign country comprising the mainland of the Australian continent, the island of Tasmania, and numerous smaller islands. Australia is the largest country by area in Oceania and the world''s sixth-largest country. Australia is the oldest, flattest, and driest inhabited continent, with the least fertile soils. It is a megadiverse country, and its size gives it a wide variety of landscapes and climates, with deserts in the centre, tropical rainforests in the north-east, tropical savannas in the north, and mountain ranges in the south-east.', 'Canberra', 25788224, 3, 3, 3),
+('Sudan', 'Sudan, officially the Republic of the Sudan, is a country in Northeast Africa. It borders the Central African Republic to the southwest, Chad to the west, Egypt to the north, Eritrea to the northeast, Ethiopia to the southeast, Libya to the northwest, South Sudan to the south, and the Red Sea. It has a population of 45.7 million people as of 2022 and occupies 1,886,068 square kilometres, making it Africa''s third-largest country by area and the third-largest by area in the Arab League. It was the largest country by area in Africa and the Arab League until the secession of South Sudan in 2011; since then both titles have been held by Algeria. Its capital and most populous city is Khartoum.', 'Khartoum', 43849260, 4, 4, 4),
+('China', 'China, officially the People''s Republic of China (PRC), is a country in East Asia. With a population exceeding 1.4 billion, it is the world''s second-most populous country. China spans the equivalent of five time zones and borders fourteen countries by land. With an area of nearly 9.6 million square kilometers (3,700,000 sq mi), it is the third-largest country by total land area. The country is divided into 33 province-level divisions: 22 provinces, five autonomous regions, four municipalities, and two semi-autonomous special administrative regions. Beijing is the national capital, while Shanghai is its most populous city and largest financial center.', 'Beijing', 1444216107, 1, 5, 5),
+('United States', 'The United States of America, commonly known as the United States or America, is a country primarily located in North America. It is a federation of 50 states, a federal capital district, and 326 Indian reservations. Outside the union of states, it asserts sovereignty over five major unincorporated island territories and various uninhabited islands. The country has the world''s third-largest land area, second-largest exclusive economic zone, and third-largest population, exceeding 334 million.', 'Washington, D.C.', 331002651, 2, 3, 6);
+
+-- Inserting data into city table
+INSERT INTO city (cityName, cityDescription, cityPopulation, cityCountryId) VALUES
+('Mumbai', 'Mumbai, formerly known as Bombay, is India\'s largest city and financial capital.', 20000000, 1),
+('Rio de Janeiro', 'Rio de Janeiro is famous for its breathtaking landscapes and Carnival celebrations.', 6747815, 2),
+('Sydney', 'Sydney is Australia\'s largest city, known for its iconic landmarks like the Sydney Opera House.', 5312163, 3),
+('Khartoum', 'Khartoum is the capital and largest city of Sudan, located at the confluence of the Blue and White Nile rivers.', 5271708, 4),
+('Shanghai', 'Shanghai is China\'s largest city and a global financial hub with a blend of modern and traditional architecture.', 27058479, 5),
+('New York City', 'New York City is a cultural melting pot and the largest city in the United States.', 8336817, 6);
+
+
+SELECT * FROM city INNER JOIN country c on city.cityCountryId = c.countryId;
+
+-- Skapa vyn "Allt_om_länder" som kombinerar information från flera tabeller
+CREATE VIEW viewCountryDetails AS
+SELECT
+    continent.continentName AS ContinentName,
+    country.countryId AS CountryId,
+    country.countryName AS CountryName,
+    country.countryDescription AS CountryDescription,
+    country.countryCapital AS CountryCapital,
+    country.countryPopulation AS CountryPopulation,
+    language.languageName AS LanguageName,
+    currency.currencyName AS CurrencyName,
+    currency.currencyAcronym AS CurrencyAcronym
+FROM country
+INNER JOIN continent ON country.countryContinentId = continent.continentId
+INNER JOIN language ON country.countryLanguageId = language.languageId
+INNER JOIN currency ON country.countryCurrencyId = currency.currencyId;
+
+SELECT * FROM continent
+JOIN country c ON continent.continentId = c.countryContinentId
+WHERE continent.continentId = 2;
+
+SELECT * FROM viewCountryDetails;
+SELECT * FROM viewCountryDetails WHERE countryId = 2;
