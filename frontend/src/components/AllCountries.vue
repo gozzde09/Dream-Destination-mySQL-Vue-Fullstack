@@ -21,7 +21,7 @@ onMounted(() => {
 
 async function getAllCountriesOnStart() {
   try {
-    const response = await fetch('https://restcountries.com/v3.1/region/europe')
+    const response = await fetch('https://restcountries.com/v3.1/region/africa')
     const countryData = await response.json()
     const countryDescriptions = await fetchAllCountryDescriptions(countryData)
 
